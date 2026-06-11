@@ -1,0 +1,39 @@
+{
+  "Version": 1,
+  "Hash": "V7r4aT31p0IcYOEUk8RYhKDBXQAOBFGirfI1HkyeeoM=",
+  "Source": "GameServer",
+  "BasePath": "_content/GameServer",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "GameServer\\wwwroot",
+      "Source": "GameServer",
+      "ContentRoot": "C:\\Users\\Tester\\Desktop\\Projects\\CircleBreakerGame\\GameServer\\wwwroot\\",
+      "BasePath": "_content/GameServer",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "C:\\Users\\Tester\\Desktop\\Projects\\CircleBreakerGame\\GameServer\\wwwroot\\index.html",
+      "SourceId": "GameServer",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Tester\\Desktop\\Projects\\CircleBreakerGame\\GameServer\\wwwroot\\",
+      "BasePath": "_content/GameServer",
+      "RelativePath": "index.html",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\index.html"
+    }
+  ]
+}
