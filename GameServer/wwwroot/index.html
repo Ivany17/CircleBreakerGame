@@ -1,39 +1,45 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Circle Breaker - Підготовка</title>
-    <style>
-        body {
-            margin: 0;
-            overflow: hidden; /* ховаємо смуги прокрутки */
-            font-family: Arial, sans-serif;
-        }
-        canvas {
-            display: block; /* прибирає зайві відступи */
-            background-color: #0a0a2a; /* темно-синє небо */
-        }
-        #info {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            color: white;
-            background: rgba(0,0,0,0.7);
-            padding: 8px 15px;
-            border-radius: 10px;
-            pointer-events: none; /* щоб текст не заважав клікам */
-        }
-    </style>
+    <title>Circle Breaker - Preparation</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div id="info">
-        Гра "Підготовка до Circle Breaker"<br>
-        Натисніть ⬆ (стрілка вгору) або Enter, щоб запустити кулю
+        Game "Preparation for Circle Breaker"<br>
+        Press UP Arrow or Enter to launch the ball
     </div>
     <canvas id="gameCanvas"></canvas>
 
     <script>
-        // Тут буде наш JavaScript код
-        console.log("Сторінка завантажена!");
+        // Get the canvas element
+        const canvas = document.getElementById('gameCanvas');
+        
+        // Get the drawing context (2D)
+        const ctx = canvas.getContext('2d');
+        
+        // Function to resize canvas to full window
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            drawBackground();
+        }
+        
+        // Function to draw dark blue background
+        function drawBackground() {
+            ctx.fillStyle = '#0a0a2a';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
+        
+        // Set initial size
+        resizeCanvas();
+        
+        // Redraw when window size changes
+        window.addEventListener('resize', function() {
+            resizeCanvas();
+        });
+        
+        console.log("Page loaded! Canvas size: " + canvas.width + " x " + canvas.height);
     </script>
 </body>
 </html>

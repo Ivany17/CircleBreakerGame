@@ -24,3 +24,4 @@ C:\Users\Tester\Desktop\Projects\CircleBreakerGame\GameServer\obj\Debug\net8.0\r
 C:\Users\Tester\Desktop\Projects\CircleBreakerGame\GameServer\obj\Debug\net8.0\GameServer.pdb
 C:\Users\Tester\Desktop\Projects\CircleBreakerGame\GameServer\obj\Debug\net8.0\GameServer.genruntimeconfig.cache
 C:\Users\Tester\Desktop\Projects\CircleBreakerGame\GameServer\obj\Debug\net8.0\ref\GameServer.dll
+C:\Users\Tester\Desktop\Projects\CircleBreakerGame\GameServer\obj\Debug\net8.0\GameServer.sourcelink.json
