@@ -1,8 +1,16 @@
 {
   "Files": [
     {
+      "Id": "C:\\Users\\Tester\\Desktop\\Projects\\CircleBreakerGame\\GameServer\\wwwroot\\app.js",
+      "PackagePath": "staticwebassets\\app.js"
+    },
+    {
       "Id": "C:\\Users\\Tester\\Desktop\\Projects\\CircleBreakerGame\\GameServer\\wwwroot\\index.html",
       "PackagePath": "staticwebassets\\index.html"
+    },
+    {
+      "Id": "C:\\Users\\Tester\\Desktop\\Projects\\CircleBreakerGame\\GameServer\\wwwroot\\style.css",
+      "PackagePath": "staticwebassets\\style.css"
     },
     {
       "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.GameServer.Microsoft.AspNetCore.StaticWebAssets.props",

@@ -11,35 +11,6 @@
     </div>
     <canvas id="gameCanvas"></canvas>
 
-    <script>
-        // Get the canvas element
-        const canvas = document.getElementById('gameCanvas');
-        
-        // Get the drawing context (2D)
-        const ctx = canvas.getContext('2d');
-        
-        // Function to resize canvas to full window
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            drawBackground();
-        }
-        
-        // Function to draw dark blue background
-        function drawBackground() {
-            ctx.fillStyle = '#0a0a2a';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-        }
-        
-        // Set initial size
-        resizeCanvas();
-        
-        // Redraw when window size changes
-        window.addEventListener('resize', function() {
-            resizeCanvas();
-        });
-        
-        console.log("Page loaded! Canvas size: " + canvas.width + " x " + canvas.height);
-    </script>
+    <script src="app.js"></script>
 </body>
 </html>

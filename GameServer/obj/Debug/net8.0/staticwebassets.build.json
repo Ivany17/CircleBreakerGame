@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "V7r4aT31p0IcYOEUk8RYhKDBXQAOBFGirfI1HkyeeoM=",
+  "Hash": "wUUvla9VGOmqvoi/5xw0miKUWoKyqMVSMxkRB97X5Yw=",
   "Source": "GameServer",
   "BasePath": "_content/GameServer",
   "Mode": "Default",
@@ -16,6 +16,25 @@
     }
   ],
   "Assets": [
+    {
+      "Identity": "C:\\Users\\Tester\\Desktop\\Projects\\CircleBreakerGame\\GameServer\\wwwroot\\app.js",
+      "SourceId": "GameServer",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Tester\\Desktop\\Projects\\CircleBreakerGame\\GameServer\\wwwroot\\",
+      "BasePath": "_content/GameServer",
+      "RelativePath": "app.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\app.js"
+    },
     {
       "Identity": "C:\\Users\\Tester\\Desktop\\Projects\\CircleBreakerGame\\GameServer\\wwwroot\\index.html",
       "SourceId": "GameServer",
@@ -34,6 +53,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\index.html"
+    },
+    {
+      "Identity": "C:\\Users\\Tester\\Desktop\\Projects\\CircleBreakerGame\\GameServer\\wwwroot\\style.css",
+      "SourceId": "GameServer",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Tester\\Desktop\\Projects\\CircleBreakerGame\\GameServer\\wwwroot\\",
+      "BasePath": "_content/GameServer",
+      "RelativePath": "style.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\style.css"
     }
   ]
 }
