@@ -9,7 +9,7 @@ function resizeCanvas() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
     drawBackground();
-    drawCore();
+    drawRing();
 }
 
 // Function to draw dark blue background
@@ -23,9 +23,22 @@ function drawCore() {
     const centerY = canvas.height / 2;
     const radius = 50;
     
-    //ctx.beginPath();
+    ctx.beginPath();
     ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
     ctx.fillStyle = 'white';
+    ctx.fill();
+}
+
+function drawRing(){
+    const centerX = canvas.width / 2;
+    const centerY = canvas.height / 2;
+    const outerRadius = 120;
+    const innerRadius = 70;
+
+    ctx.beginPath();
+    ctx.arc(centerX, centerY, outerRadius, 0, Math.PI * 2, true);  // false зовнішнє – за годинниковою стрілки
+    ctx.arc(centerX, centerY, innerRadius, 0, Math.PI * 2, false);   // true внутрішнє – проти годинникової стрілки
+    ctx.fillStyle = 'green';
     ctx.fill();
 }
 
