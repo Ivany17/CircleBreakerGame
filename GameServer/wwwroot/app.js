@@ -1,177 +1,194 @@
 // Get the canvas element
 const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d', { willReadFrequently: true });
 
-// Get the drawing context (2D)
-const ctx = canvas.getContext('2d');
-
+// Game variables
 let rotationAngle = 0;
+let ballY = 1000;
+let ballSpeed = 0;
+let score = 0;
+let gameOver = false;
 
-let ballY = 1000;        // Початкова позиція кульки по вертикалі (0 = самий верх, 1000 - внизу поза екраном)
-let ballSpeed = 0;    // Швидкість руху кульки (поки що 0, вона не рухається)
+// Ring properties
+const RING_RADIUS = 95;
+const RING_WIDTH = 50;
+const INNER_RADIUS = RING_RADIUS - RING_WIDTH / 2;
+const OUTER_RADIUS = RING_RADIUS + RING_WIDTH / 2;
 
-const GAP_START = 4.0;  // Ширший отвір
-const GAP_END = 5.4;    // Ширший отвір
+// Gap properties (radians)
+const GAP_START = 4.2;
+const GAP_END = 5.2;
 
-// Function to resize canvas to full window
+// Resize canvas
 function resizeCanvas() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
-    ballY = canvas.height + 50; // Ховаємо кульку знизу
-    // drawBackground();
-    // drawRing();
+    ballY = canvas.height + 50;
 }
 
-// Function to draw dark blue background
+// Draw background
 function drawBackground() {
-    // Очищуємо canvas повністю (робимо його прозорим)
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    // Потім заливаємо темно-синім
     ctx.fillStyle = '#0a0a2a';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 }
 
-// Це ядро гри. Кулька має долетіти до нього, не зачепивши кільця.
-function drawCore() {
-    const centerX = canvas.width / 2;
-    const centerY = canvas.height / 2;
-    const radius = 50;
+// Draw the ring with gap
+function drawRing() {
+    const cx = canvas.width / 2;
+    const cy = canvas.height / 2;
+    
+    const start = GAP_START + rotationAngle;
+    const end = GAP_END + rotationAngle;
+    
+    // Red part (everything except the gap)
+    ctx.beginPath();
+    ctx.arc(cx, cy, RING_RADIUS, end, Math.PI * 2 + start);
+    ctx.strokeStyle = 'red';
+    ctx.lineWidth = RING_WIDTH;
+    ctx.stroke();
+    
+    // Green part (the gap)
+    ctx.beginPath();
+    ctx.arc(cx, cy, RING_RADIUS, start, end);
+    ctx.strokeStyle = 'green';
+    ctx.lineWidth = RING_WIDTH;
+    ctx.stroke();
+}
+
+// Draw the ball
+function drawBall() {
+    const cx = canvas.width / 2;
+    const radius = 15;
     
     ctx.beginPath();
-    ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
-    ctx.fillStyle = 'white';
+    ctx.arc(cx, ballY, radius, 0, Math.PI * 2);
+    ctx.fillStyle = 'yellow';
     ctx.fill();
 }
 
-function drawRing() {
-    const centerX = canvas.width / 2;
-    const centerY = canvas.height / 2;
-    const radius = 95;
-    const ringWidth = 50;
+// Check collision by checking pixel color
+function checkCollision() {
+    const cx = canvas.width / 2;
+    const cy = canvas.height / 2;
     
-    // Малюємо червону частину (обходимо отвір)
-    ctx.beginPath();
-    ctx.arc(centerX, centerY, radius, GAP_END + rotationAngle, Math.PI * 2 + GAP_START + rotationAngle);
-    ctx.strokeStyle = 'red';
-    ctx.lineWidth = ringWidth;
-    ctx.stroke();
+    const ballX = cx;
+    const ballYPos = ballY;
     
-    // Малюємо зелену частину (отвір)
-    ctx.beginPath();
-    ctx.arc(centerX, centerY, radius, GAP_START + rotationAngle, GAP_END + rotationAngle);
-    ctx.strokeStyle = 'green';
-    ctx.lineWidth = ringWidth;
-    ctx.stroke();
+    const dx = 0;
+    const dy = cy - ballYPos;
+    const distance = Math.sqrt(dx * dx + dy * dy);
+    
+    // Якщо кулька далеко за межами кільця — ігноруємо
+    if (distance > OUTER_RADIUS + 20) {
+        return 'outside';
+    }
+    
+    // Якщо кулька всередині або поруч з кільцем — перевіряємо колір
+    // Читаємо колір пікселя в позиції кульки
+    const imageData = ctx.getImageData(ballX, ballYPos, 1, 1);
+    const data = imageData.data;
+    const red = data[0];
+    const green = data[1];
+    const blue = data[2];
+    
+    const isGreen = green > 200 && red < 100 && blue < 100;
+    const isRed = red > 200 && green < 100 && blue < 100;
+    const isBlue = red < 50 && green < 50 && blue > 100;
+    
+    // Якщо піксель синій (фон) — кулька в дірці або поза кільцем
+    if (isBlue) {
+        return 'outside';
+    }
+    
+    if (isGreen) {
+        return 'gap';
+    } else if (isRed) {
+        return 'ring';
+    } else {
+        return 'outside';
+    }
 }
 
+// Main game loop
 function gameLoop() {
-    rotationAngle = rotationAngle - 0.02; // або +0.02, як у тебе
-    // Оновлюємо позицію кульки
-    ballY = ballY - ballSpeed;
+    rotationAngle += 0.02;
+    ballY -= ballSpeed;
     
-    // Перевіряємо зіткнення (тільки якщо кулька летить)
-    if (ballSpeed > 0) {
-        const collision = checkCollision();
-        if (collision === 'gap') {
-            // Кулька потрапила в отвір! (дозволено)
-            console.log("Through the gap! +1 point");
-            // Скидаємо кульку вниз
+    if (ballSpeed > 0 && !gameOver) {
+        // Малюємо фон і кільце без кульки для перевірки
+        drawBackground();
+        drawRing();
+        
+        const result = checkCollision();
+        if (result === 'gap') {
+            console.log('Through the gap! +1 point');
+            score++;
             ballY = canvas.height + 50;
             ballSpeed = 0;
-        } else if (collision === 'ring') {
-            // Кулька влучила в червоне кільце (заборонено)
-            console.log("Game Over! Hit the red ring.");
-            // Скидаємо кульку вниз
-            ballY = canvas.height + 50;
+        } else if (result === 'ring') {
+            console.log('Game Over! Hit the red ring.');
+            gameOver = true;
             ballSpeed = 0;
-            // Тут можна додати перезапуск гри
+        } else if (result === 'outside') {
+            // Якщо кулька в дірці і піднялася вище центру — скидаємо
+            const cy = canvas.height / 2;
+            if (ballY < cy) {
+                ballY = canvas.height + 50;
+                ballSpeed = 0;
+            }
         }
     }
     
-    // Якщо кулька вилетіла за верхній край
     if (ballY < -50) {
         ballY = canvas.height + 50;
         ballSpeed = 0;
     }
     
-    // Малюємо все
     drawBackground();
     drawRing();
     drawBall();
     
+    ctx.fillStyle = 'white';
+    ctx.font = '24px Arial';
+    ctx.fillText('Score: ' + score, 10, 50);
+    
+    if (gameOver) {
+        ctx.fillStyle = 'red';
+        ctx.font = '48px Arial';
+        ctx.fillText('GAME OVER', canvas.width/2 - 120, canvas.height/2);
+    }
+    
     requestAnimationFrame(gameLoop);
 }
 
-function drawBall() {
-    const centerX = canvas.width / 2; // Кулька летить по центру (по X)
-    const radius = 15; // Розмір кульки
-
-    ctx.beginPath();
-    ctx.arc(centerX, ballY, radius, 0, Math.PI * 2);
-    ctx.fillStyle = 'yellow';
-    ctx.fill();
-}
-
-function checkCollision() {
-    const centerX = canvas.width / 2;
-    const centerY = canvas.height / 2;
-    const radius = 95;
-    const ringWidth = 50;
-    const innerRadius = radius - ringWidth / 2;
-    const outerRadius = radius + ringWidth / 2;
-    
-    const dx = 0;
-    const dy = centerY - ballY;
-    const distance = Math.sqrt(dx * dx + dy * dy);
-    
-    if (distance > outerRadius || distance < innerRadius) {
-        return 'outside';
-    }
-    
-    // Кут кульки
-    let angle = Math.atan2(dy, dx);
-    if (angle < 0) angle += Math.PI * 2;
-    
-    // Кути отвору (з урахуванням обертання)
-    let gapStart = GAP_START + rotationAngle;
-    let gapEnd = GAP_END + rotationAngle;
-    
-    // Нормалізуємо кути в [0, 2*PI)
-    gapStart = ((gapStart % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2);
-    gapEnd = ((gapEnd % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2);
-    
-    // Перевіряємо, чи кут кульки в межах отвору
-    let isInGap = false;
-    if (gapStart < gapEnd) {
-        isInGap = angle >= gapStart && angle <= gapEnd;
-    } else {
-        isInGap = angle >= gapStart || angle <= gapEnd;
-    }
-    
-    console.log(`Angle: ${angle.toFixed(3)}, Gap: ${gapStart.toFixed(3)} - ${gapEnd.toFixed(3)}, In gap: ${isInGap}`);
-    
-    return isInGap ? 'gap' : 'ring';
-}
-
-// Запускаємо цикл гри
-gameLoop();
-
-// Set initial size
-resizeCanvas();
-
-// Redraw when window size changes
-window.addEventListener('resize', function() {
-    resizeCanvas();
-});
-
+// Keyboard controls
 window.addEventListener('keydown', function(event) {
     if (event.code === 'Space' || event.code === 'ArrowUp') {
-        event.preventDefault(); // Це блокує прокрутку сторінки
-        // Якщо кулька внизу (або нерухома) – запускаємо
+        event.preventDefault();
+        
+        if (gameOver) {
+            gameOver = false;
+            score = 0;
+            ballY = canvas.height + 50;
+            ballSpeed = 0;
+            return;
+        }
+        
         if (ballSpeed === 0) {
-            ballY = canvas.height - 30; // Ставимо кульку внизу
-            ballSpeed = 7; // Задаємо швидкість (7 пікселів за кадр)
+            ballY = canvas.height - 30;
+            ballSpeed = 7;
         }
     }
 });
 
-console.log("Page loaded! Canvas size: " + canvas.width + " x " + canvas.height);
+// Handle window resize
+window.addEventListener('resize', function() {
+    resizeCanvas();
+});
+
+// Initialize
+resizeCanvas();
+gameLoop();
+
+console.log('Game started!');
